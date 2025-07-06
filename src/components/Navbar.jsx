@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
 
@@ -6,11 +7,11 @@ export const Navbar = () => {
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
 				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+					<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Star_wars2.svg" style={{ height: "50px", width: "100px" }} />
 				</Link>
 				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+					<Link to="/favorites">
+						<button className="btn btn-warning">Favorites</button>
 					</Link>
 				</div>
 			</div>

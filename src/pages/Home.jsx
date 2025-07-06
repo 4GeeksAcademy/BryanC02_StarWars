@@ -1,16 +1,16 @@
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import React, { useEffect, useState } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { Demo } from "./Demo";
+import { Planets } from "./Planets";
 
-export const Home = () => {
+const Home = () => {
 
-  const {store, dispatch} =useGlobalReducer()
+  return (
+    <div>
+      <Demo/>
+      <Planets/>
+    </div>
+  );
+};
 
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-		</div>
-	);
-}; 
+export default Home;
