@@ -10,40 +10,61 @@ export const Planets = () => {
         // Fetch planets
         fetch("https://www.swapi.tech/api/planets")
             .then((res) => res.json())
-            .then((data) => setPlanets(data.results))
-            .catch((err) => console.error("Error fetching planets:", err));
+            .then((data) => {
+                const planetUrls = data.results.map((planet) => planet.url);
+
+                // Fetch each planet’s full data in parallel
+                Promise.all(
+                    planetUrls.map((url) =>
+                        fetch(url)
+                            .then((res) => res.json())
+                            .then((detailed) => detailed.result)
+                    )
+                ).then((fullPlanetData) => setPlanets(fullPlanetData));
+            })
+            .catch((err) => console.error("Failed to fetch full planet info", err));
     }, []);
 
     return (
-        <div className="container">
-            <h2 className="mt-5">Planets</h2>
-            <div className="d-flex overflow-auto gap-3" style={{ whiteSpace: "nowrap" }}>
+        <div className="container mt-5">
+            <h2 className="text-center">Planets</h2>
+            <div className="d-flex flex-row flex-nowrap gap-2 px-2 overflow-auto">
                 {planets.map((planet) => (
-                    <div
-                        key={planet.uid}
-                        className="card"
-                        style={{height: "200px", minWidth: "200px"}}
-                    >
-                        <img
-                            src={`https://starwars-visualguide.com/assets/img/planets/${planet.uid}.jpg`}
-                            className="card-img-top"
-                            alt={planet.name}
-                            onError={(e) => (e.target.style.display = "none")}
-                        />
-                        <div className="card-body mt-5">
-                            <h5 className="card-title">{planet.name}</h5>
-                            <button
-                                className="btn btn-outline-success"
-                                onClick={() =>
-                                    dispatch({ type: "ADD_FAVORITE", payload: planet })
-                                }
-                            >
-                                + Add to Favorites
-                            </button>
+                    <div key={planet.properties.uid} className="me-2">
+                        <div className="card" style={{ height: "390px", width: "300px" }}>
+                            <img
+                                src={`https://starwars-visualguide.com/assets/img/planets/${planet.uid}.jpg`}
+                                className="card-img-top rounded-1"
+                                alt={planet.properties.name}
+                                onError={(e) => (e.target.src = "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg")}
+                                style={{ width: "299px", height: "200px", objectFit: "cover" }}
+                            />
+                            <div className="card-body">
+                                <h5 className="card-title">
+                                    {planet.properties.name}
+                                </h5>
+                                <p>
+                                    Population: {planet.properties.population} <br />
+                                    Terrain: {planet.properties.terrain}
+                                </p>
+                                <div className="mt-auto d-flex justify-content-between gap-2">
+                                    <Link to={`/single/planet/${planet.uid}`}>
+                                        <button className="btn btn-outline-primary btn-sm ms-auto">More Info</button>
+                                    </Link>
+                                    <button
+                                        onClick={() => {
+                                            dispatch({ type: "ADD_FAVORITE", payload: planet })
+                                            alert(`${planet.properties.name} added to favorites!`);
+                                        }}
+                                    >
+                                        ❤️
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
