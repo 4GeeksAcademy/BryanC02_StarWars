@@ -52,6 +52,7 @@ export const Planets = () => {
                                         <button className="btn btn-outline-primary btn-sm ms-auto">More Info</button>
                                     </Link>
                                     <button
+                                        className="btn btn-outline-dark btn-sm"
                                         onClick={() => {
                                             dispatch({ type: "ADD_FAVORITE", payload: planet })
                                             alert(`${planet.properties.name} added to favorites!`);
