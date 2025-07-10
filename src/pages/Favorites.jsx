@@ -11,7 +11,7 @@ const Favorites = () => {
 
   const getImageType = (item) => {
     if (item.properties?.population) return "planets";
-    return "characters";
+    return "people";
   };
 
   return (
@@ -29,10 +29,12 @@ const Favorites = () => {
                 alt={char.properties.name}
                 style={{ width: "50px", height: "50px", objectFit: "cover" }}
                 onError={(e) =>
-                  (e.target.src = "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg")
+                  (e.target.src = "https://upload.wikimedia.org/wikipedia/commons/c/ce/Star_wars2.svg")
                 }
               />
-              <span>{char.properties.name}</span>
+              <Link to={`/single/${getImageType(char)}/${char.uid}`} className="text-decoration-none">
+                {char.properties.name}
+              </Link>
               <button className="btn btn-danger btn-sm" onClick={() => handleRemove(char)}>
                 Remove
               </button>

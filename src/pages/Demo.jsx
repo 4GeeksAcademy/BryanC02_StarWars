@@ -23,6 +23,7 @@ export const Demo = () => {
       .catch(err => console.error("Error fetching people:", err));
   }, []);
 
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">Star Wars Characters</h1>
@@ -54,8 +55,16 @@ export const Demo = () => {
                   <button
                     className="btn btn-outline-dark btn-sm"
                     onClick={() => {
-                      dispatch({ type: "ADD_FAVORITE", payload: character })
-                      alert(`${character.properties.name} added to favorites!`);
+                      const alreadyFav = store.favorites.some((fav) => fav.uid === character.uid);
+                      if (!alreadyFav) {
+                        dispatch({
+                          type: "ADD_FAVORITE",
+                          payload: { ...character, type: "character" } // ✅ set correct type
+                        });
+                        alert(`${character.properties.name} added to favorites!`);
+                        } else {
+                        alert(`${character.properties.name} is already in favorites!`);
+                      }
                     }}
                   >
                     ❤️
