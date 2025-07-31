@@ -27,16 +27,39 @@ const reducer = (state, action) => {
 // Create context
 const GlobalContext = createContext();
 
+const addFavorite = async (type, itemId) => {
+  const userId = 1; // Still hardcoded for now
+  const url = `https://bookish-barnacle-4jvv5vrqj59wcq5rj-3000.app.github.dev/favorite/${type}/${itemId}`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log("Favorite added:", data);
+    } else {
+      console.error("Failed to add favorite", await res.json());
+    }
+  } catch (err) {
+    console.error("Error adding favorite", err);
+    console.log("Calling addFavorite:", type, itemId);
+  }
+};
+
+
 // Provider component
 export const StoreProvider = ({ children }) => {
   const [store, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <GlobalContext.Provider value={{ store, dispatch }}>
+    <GlobalContext.Provider value={{ store, dispatch, addFavorite }}>
       {children}
     </GlobalContext.Provider>
   );
 };
+
 
 // Custom hook
 const useGlobalReducer = () => useContext(GlobalContext);

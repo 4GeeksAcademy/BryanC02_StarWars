@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Planets = () => {
-    const { store, dispatch } = useGlobalReducer();
+    const { store, dispatch, addFavorite } = useGlobalReducer();
     const [planets, setPlanets] = useState([]);
+
+    const alreadyFav = store.favorites.some(fav => fav.planet?.id === planets.id);
 
     useEffect(() => {
         // Fetch planets
@@ -59,6 +61,17 @@ export const Planets = () => {
                                         }}
                                     >
                                         ❤️
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (!alreadyFav) {
+                                                addFavorite("planet", planet.uid);
+                                            } else {
+                                                alert(`${planet.properties.name} is already in favorites`);
+                                            }
+                                        }}
+                                    >
+                                        {alreadyFav ? "❤️ Favorited" : "🤍 Favorite"}
                                     </button>
                                 </div>
                             </div>

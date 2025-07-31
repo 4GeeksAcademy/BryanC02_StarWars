@@ -3,8 +3,10 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import { Link } from "react-router-dom";
 
 export const Demo = () => {
-  const { store, dispatch } = useGlobalReducer();
+  const { store, dispatch, addFavorite } = useGlobalReducer();
   const [people, setPeople] = useState([]);
+
+  const alreadyFav = store.favorites.some(fav => fav.person?.id === person.id);
 
   useEffect(() => {
     fetch("https://www.swapi.tech/api/people")
@@ -62,12 +64,26 @@ export const Demo = () => {
                           payload: { ...character, type: "character" } // ✅ set correct type
                         });
                         alert(`${character.properties.name} added to favorites!`);
-                        } else {
+                      } else {
                         alert(`${character.properties.name} is already in favorites!`);
                       }
                     }}
                   >
                     ❤️
+                  </button>
+                  <button onClick={() => actions.addFavorite("person", person.id)}>
+                    ❤️ Favorite
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!alreadyFav) {
+                        addFavorite("people", character.uid);
+                      } else {
+                        alert(`${person.properties.name} is already in favorites`);
+                      }
+                    }}
+                  >
+                    {alreadyFav ? "❤️ Favorited" : "🤍 Favorite"}
                   </button>
                 </div>
               </div>
